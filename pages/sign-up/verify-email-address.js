@@ -6,9 +6,9 @@ const VerifyEmailAddress = () => {
   const { client } = useClerk();
   const { signUpAttempt } = client;
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     try {
-      signUpAttempt.attemptEmailAddressVerification(data);
+      await signUpAttempt.attemptEmailAddressVerification(data);
       router.push('/');
     } catch (err) {
       console.log(err);
@@ -19,8 +19,9 @@ const VerifyEmailAddress = () => {
     <div className="flex flex-col min-h-screen py-24 bg-gray-50 sm:px-6 lg:px-8">
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
-          <h2 className="mt-6 mb-4 text-3xl font-extrabold text-center text-gray-900">
-            Enter the 6-digit code you received in your email
+          <h2 className="mt-6 mb-4 text-2xl font-extrabold text-center text-gray-900">
+            Enter the 6-digit code you received in your email{' '}
+            {signUpAttempt.emailAddress}
           </h2>
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div>

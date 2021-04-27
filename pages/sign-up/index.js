@@ -8,10 +8,10 @@ const SignUp = () => {
   const { register, handleSubmit } = useForm();
   const router = useRouter();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     try {
-      signUpAttempt.create(data);
-      signUpAttempt.prepareEmailAddressVerification();
+      await signUpAttempt.create(data);
+      await signUpAttempt.prepareEmailAddressVerification();
       router.push('sign-up/verify-email-address');
     } catch (err) {
       console.log(err);
