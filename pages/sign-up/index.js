@@ -1,50 +1,38 @@
 import { useClerk } from '@clerk/clerk-react'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 const SignUp = () => {
   const { client } = useClerk();
   const { signInAttempt, signUpAttempt } = client;
+  const { register, handleSubmit } = useForm();
 
-  const [data, setData] = useState({
-    first_name: '',
-    last_name: '',
-    email_address: '',
-    password: '',
-  });
-
-  const handleChange = (e) => {
-    setData({
-      ...data,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (data) => {
     console.log(data);
-    signUpAttempt.create({ first_name, last_name, email_address, password });
+    signUpAttempt.create(data);
+    signUpAttempt.prepareEmailAddressVerification();
   };
 
   return (
     <form
       className="flex flex-col w-64 mx-auto space-y-3"
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <input
         className="border-2 border-gray-600 rounded-lg py-2 px-3"
         type="text"
         id="first_name"
         name="first_name"
+        {...register('first_name')}
         placeholder="First name"
-        onChange={handleChange}
       />
       <input
         className="border-2 border-gray-600 rounded-lg py-2 px-3"
         type="text"
         id="last_name"
         name="last_name"
+        {...register('last_name')}
         placeholder="Last Name"
-        onChange={handleChange}
       />
       <input
         className="border-2 border-gray-600 rounded-lg py-2 px-3"
@@ -52,7 +40,7 @@ const SignUp = () => {
         id="email_address"
         name="email_address"
         placeholder="Email address"
-        onChange={handleChange}
+        {...register('email_address')}
       />
       <input
         className="border-2 border-gray-600 rounded-lg py-2 px-3"
@@ -60,7 +48,7 @@ const SignUp = () => {
         id="password"
         name="password"
         placeholder="Password"
-        onChange={handleChange}
+        {...register('password')}
       />
       <button className="rounded-lg p-2 bg-blue-600 text-white" type="submit">
         Sign up
