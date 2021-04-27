@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 
 const SignUp = () => {
   const { client } = useClerk();
-  const { signInAttempt, signUpAttempt } = client;
+  const { signUpAttempt } = client;
   const { register, handleSubmit } = useForm();
   const router = useRouter();
 
@@ -19,7 +19,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center min-h-screen py-12 bg-gray-50 sm:px-6 lg:px-8">
+    <div className="flex flex-col min-h-screen py-24 bg-gray-50 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <img className="w-auto h-12 mx-auto" src="./clerk.svg" alt="Clerk" />
         <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
