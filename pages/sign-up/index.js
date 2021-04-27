@@ -1,59 +1,125 @@
 import { useClerk } from '@clerk/clerk-react'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 
 const SignUp = () => {
   const { client } = useClerk();
   const { signInAttempt, signUpAttempt } = client;
   const { register, handleSubmit } = useForm();
+  const router = useRouter();
 
   const onSubmit = (data) => {
-    console.log(data);
-    signUpAttempt.create(data);
-    signUpAttempt.prepareEmailAddressVerification();
+    try {
+      signUpAttempt.create(data);
+      signUpAttempt.prepareEmailAddressVerification();
+      router.push('sign-up/verify-email-address');
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
-    <form
-      className="flex flex-col w-64 mx-auto space-y-3"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <input
-        className="border-2 border-gray-600 rounded-lg py-2 px-3"
-        type="text"
-        id="first_name"
-        name="first_name"
-        {...register('first_name')}
-        placeholder="First name"
-      />
-      <input
-        className="border-2 border-gray-600 rounded-lg py-2 px-3"
-        type="text"
-        id="last_name"
-        name="last_name"
-        {...register('last_name')}
-        placeholder="Last Name"
-      />
-      <input
-        className="border-2 border-gray-600 rounded-lg py-2 px-3"
-        type="email"
-        id="email_address"
-        name="email_address"
-        placeholder="Email address"
-        {...register('email_address')}
-      />
-      <input
-        className="border-2 border-gray-600 rounded-lg py-2 px-3"
-        type="password"
-        id="password"
-        name="password"
-        placeholder="Password"
-        {...register('password')}
-      />
-      <button className="rounded-lg p-2 bg-blue-600 text-white" type="submit">
-        Sign up
-      </button>
-    </form>
+    <div className="flex flex-col justify-center min-h-screen py-12 bg-gray-50 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <img className="w-auto h-12 mx-auto" src="./clerk.svg" alt="Clerk" />
+        <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
+          Sign up
+        </h2>
+      </div>
+
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <label
+                htmlFor="first_name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                First name
+              </label>
+              <div className="mt-1">
+                <input
+                  id="first_name"
+                  name="first_name"
+                  type="text"
+                  autoComplete="given-name"
+                  required
+                  {...register('first_name')}
+                  className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                htmlFor="last_name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Last name
+              </label>
+              <div className="mt-1">
+                <input
+                  id="last_name"
+                  name="last_name"
+                  type="text"
+                  autoComplete="family_name"
+                  required
+                  {...register('last_name')}
+                  className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Email address
+              </label>
+              <div className="mt-1">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  {...register('email_address')}
+                  className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Password
+              </label>
+              <div className="mt-1">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  {...register('password')}
+                  className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Sign up
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 
