@@ -1,8 +1,10 @@
-import "../styles/globals.css";
-import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import Layout from "../components/Layout";
+import '../styles/globals.css'
+
+import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-react'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+
+import Layout from '../components/Layout'
 
 /**
  * List pages you want to be publicly accessible, or leave empty if
@@ -12,12 +14,12 @@ import Layout from "../components/Layout";
  *  "/foo/bar"       for pages/foo/bar.js
  *  "/foo/[...bar]"  for pages/foo/[...bar].js
  */
-const publicPages = ["/", "/sign-in/[[...index]]", "/sign-up/[[...index]]"];
+const publicPages = ['/', '/sign-in/[[...index]]', '/sign-up/[[...index]]'];
 
 const RedirectToSignIn = () => {
   const router = useRouter();
   useEffect(() => {
-    router.push("/sign-in");
+    router.push('/sign-in');
   });
   return null;
 };
@@ -35,18 +37,12 @@ const MyApp = ({ Component, pageProps }) => {
       navigate={(to) => router.push(to)}
     >
       <Layout>
-        {publicPages.includes(router.pathname) ? (
+        <SignedIn>
           <Component {...pageProps} />
-        ) : (
-          <>
-            <SignedIn>
-              <Component {...pageProps} />
-            </SignedIn>
-            <SignedOut>
-              <RedirectToSignIn />
-            </SignedOut>
-          </>
-        )}
+        </SignedIn>
+        <SignedOut>
+          <Component {...pageProps} />
+        </SignedOut>
       </Layout>
     </ClerkProvider>
   );
