@@ -2,6 +2,8 @@ import { useClerk } from '@clerk/clerk-react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 
+import SignUpWithGoogle from '../../components/SignUpWithGoogle'
+
 const SignUp = () => {
   const { client } = useClerk();
   const { signUpAttempt } = client;
@@ -29,6 +31,12 @@ const SignUp = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
+          <SignUpWithGoogle />
+          <div class="flex items-center justify-center space-x-3 py-5">
+            <div class="w-32 h-px bg-gray-300"></div>
+            <p class="text-sm font-medium text-gray-400">OR</p>
+            <div class="w-32 h-px bg-gray-300"></div>
+          </div>
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label
