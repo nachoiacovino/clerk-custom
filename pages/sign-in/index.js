@@ -8,10 +8,9 @@ const SignIn = () => {
   const { register, handleSubmit } = useForm();
   const router = useRouter();
 
-  const onSubmit = async ({ identifier, password }) => {
+  const onSubmit = async (data) => {
     try {
-      await signInAttempt.create({ identifier });
-      await signInAttempt.attemptFactorOne({ strategy: 'password', password });
+      await signInAttempt.create(data);
       router.push('/');
     } catch (err) {
       console.log(err);
