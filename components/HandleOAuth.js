@@ -10,6 +10,13 @@ const HandleOAuth = () => {
   useEffect(() => {
     const load = async () => {
       try {
+        if (signInAttempt.factorOneVerification.status === 'transferable') {
+          const response = await signUpAttempt.create({ transfer: true });
+          if (response.status === 'complete') {
+            setSession(response.createdSessionId, () => router.push('/'));
+          }
+        }
+
         if (
           signUpAttempt.externalAccountVerification.status === 'transferable'
         ) {
