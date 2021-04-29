@@ -4,6 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  svg,
+  img {
+    display: inline-block;
+  }
+}
+
 html,
 body {
   font-family: 'Source Sans Pro', sans-serif;
