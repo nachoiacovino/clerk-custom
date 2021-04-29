@@ -1,21 +1,31 @@
 import { useClerk } from '@clerk/clerk-react'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 const FactorOne = () => {
   const { register, handleSubmit } = useForm();
-  const { client } = useClerk();
+  const { client, setSession, navigateAfterSignIn } = useClerk();
   const { signInAttempt } = client;
   const router = useRouter();
 
   const onSubmit = async ({ code }) => {
     try {
-      await signInAttempt.attemptFactorOne({ strategy: 'email_code', code });
-      router.push('/');
+      const response = await signInAttempt.attemptFactorOne({
+        strategy: 'email_code',
+        code,
+      });
+      setSession(response.createdSessionId, navigateAfterSignIn);
     } catch (err) {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if (client.sessions[0]) {
+      router.push('/');
+    }
+  }, [client]);
 
   return (
     <div className="flex flex-col min-h-screen py-24 bg-gray-50 sm:px-6 lg:px-8">

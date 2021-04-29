@@ -1,5 +1,6 @@
 import { useClerk } from '@clerk/clerk-react'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import SignUpWithGoogle from '../../components/SignUpWithGoogle'
@@ -19,6 +20,12 @@ const SignUp = () => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if (client.sessions[0]) {
+      router.push('/');
+    }
+  }, [client]);
 
   return (
     <div className="flex flex-col min-h-screen py-24 bg-gray-50 sm:px-6 lg:px-8">

@@ -1,24 +1,31 @@
 import { useClerk } from '@clerk/clerk-react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import SignUpWithGoogle from '../../components/SignUpWithGoogle'
 
 const SignIn = () => {
-  const { client } = useClerk();
+  const { client, setSession, navigateAfterSignIn } = useClerk();
   const { signInAttempt } = client;
   const { register, handleSubmit } = useForm();
   const router = useRouter();
 
   const onSubmit = async (data) => {
     try {
-      await signInAttempt.create(data);
-      router.push('/');
+      const response = await signInAttempt.create(data);
+      setSession(response.createdSessionId, navigateAfterSignIn);
     } catch (err) {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if (client.sessions[0]) {
+      router.push('/');
+    }
+  }, [client]);
 
   return (
     <div className="flex flex-col min-h-screen py-24 bg-gray-50 sm:px-6 lg:px-8">
