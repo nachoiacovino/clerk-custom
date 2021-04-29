@@ -1,29 +1,49 @@
 import { useClerk } from '@clerk/clerk-react'
 
-const SignUpWithGoogle = ({ text = 'Sign up with Google' }) => {
+const SignUpWithGoogle = ({ signIn }) => {
   const { client } = useClerk();
   const { signUpAttempt } = client;
+  let handleClick;
 
-  const handleSignUp = async () => {
-    const response = await signUpAttempt.create({
-      external_account_strategy: 'oauth_google',
-      // Redirect here if oauth fails or if additional fields must
-      // still be collected after oauth
-      external_account_redirect_url:
-        'http://localhost:3000/sign-up/handle-oauth',
-      // Redirect here if oauth successfully creates an account
-      // For default settings and a new account, this is where
-      // the user will end up.
-      external_account_action_complete_redirect_url: 'http://localhost:3000',
-    });
+  if (signIn) {
+    handleClick = async () => {
+      const response = await signUpAttempt.create({
+        external_account_strategy: 'oauth_google',
+        // Redirect here if oauth fails or if additional fields must
+        // still be collected after oauth
+        external_account_redirect_url:
+          'http://localhost:3000/sign-up/handle-oauth',
+        // Redirect here if oauth successfully creates an account
+        // For default settings and a new account, this is where
+        // the user will end up.
+        external_account_action_complete_redirect_url: 'http://localhost:3000',
+      });
 
-    window.location.href =
-      response.externalAccountVerification.externalVerificationRedirectURL.href;
-  };
+      window.location.href =
+        response.externalAccountVerification.externalVerificationRedirectURL.href;
+    };
+  } else {
+    handleClick = async () => {
+      const response = await signInAttempt.create({
+        strategy: 'oauth_google',
+        // Redirect here if oauth fails, if the account hasn't
+        // been created yet, or if a second factor still needs
+        // to be collected
+        redirect_url: 'http://localhost:3000/sign-in/handle-oauth',
+        // Redirect here if oauth successfully creates a session
+        // For default settings, if the account has already been
+        // created, this is where the user will end up.
+        action_complete_redirect_url: 'http://localhost:3000',
+      });
+
+      window.location.href =
+        response.factorOneVerification.externalVerificationRedirectURL.href;
+    };
+  }
 
   return (
     <button
-      onClick={handleSignUp}
+      onClick={handleClick}
       className="flex items-center justify-center w-10/12 py-2 mx-auto space-x-1 bg-white border border-gray-300 rounded-md text-small"
     >
       <svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18">
@@ -44,7 +64,7 @@ const SignUpWithGoogle = ({ text = 'Sign up with Google' }) => {
           fill="#EA4335"
         ></path>
       </svg>
-      <span>{text}</span>
+      <span>Sign {signIn ? 'in' : 'up'} with Google</span>
     </button>
   );
 };

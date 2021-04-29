@@ -31,11 +31,11 @@ const SignIn = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
-          <SignUpWithGoogle />
-          <div class="flex items-center justify-center space-x-3 py-5">
-            <div class="w-32 h-px bg-gray-300"></div>
-            <p class="text-sm font-medium text-gray-400">OR</p>
-            <div class="w-32 h-px bg-gray-300"></div>
+          <SignUpWithGoogle signIn />
+          <div className="flex items-center justify-center py-5 space-x-3">
+            <div className="w-32 h-px bg-gray-300"></div>
+            <p className="text-sm font-medium text-gray-400">OR</p>
+            <div className="w-32 h-px bg-gray-300"></div>
           </div>
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div>
