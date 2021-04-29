@@ -3,27 +3,31 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 const HandleOAuth = () => {
-  const { client, setSession, navigateAfterSignIn } = useClerk();
+  const { client, setSession } = useClerk();
   const { signUpAttempt, signInAttempt } = client;
   const router = useRouter();
 
   useEffect(() => {
     const load = async () => {
-      console.log(signUpAttempt.externalAccountVerification);
-      if (signUpAttempt.externalAccountVerification.status === 'transferable') {
-        // If it's transferable, create a signInAttempt with it
-        const response = await signInAttempt.create({ transfer: true });
+      try {
+        if (
+          signUpAttempt.externalAccountVerification.status === 'transferable'
+        ) {
+          // If it's transferable, create a signInAttempt with it
+          const response = await signInAttempt.create({ transfer: true });
 
-        // If 2fa is not on, the newly created signInAttempt will immediately
-        // turn to complete
-        if (response.status === 'complete') {
-          setSession(response.createdSessionId, navigateAfterSignIn);
-        } else if (response.status === 'needs_factor_two') {
-          // sometimes you need to collect a second factor
-          // more on this later
+          // If 2fa is not on, the newly created signInAttempt will immediately
+          // turn to complete
+          if (response.status === 'complete') {
+            setSession(response.createdSessionId, () => router.push('/'));
+          } else if (response.status === 'needs_factor_two') {
+            // sometimes you need to collect a second factor
+            // more on this later
+          }
         }
+      } catch (err) {
+        console.log(err);
       }
-      router.push('/');
     };
     load();
   }, []);
