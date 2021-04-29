@@ -1,11 +1,8 @@
 import { useClerk } from '@clerk/clerk-react'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 
-import SignUpWithGoogle from '../../components/SignUpWithGoogle'
-
-const SignIn = () => {
+const ForgotPassword = () => {
   const { client } = useClerk();
   const { signInAttempt } = client;
   const { register, handleSubmit } = useForm();
@@ -13,8 +10,21 @@ const SignIn = () => {
 
   const onSubmit = async (data) => {
     try {
-      await signInAttempt.create(data);
-      router.push('/');
+      const response = await signInAttempt.create(data);
+      const strategy = response.allowedFactorOneStrategies.find(
+        (x) => x.name === 'email_code',
+      );
+
+      console.log(strategy);
+
+      // 3. Send the email code
+      await signInAttempt.prepareFactorOne({
+        name: 'email_code',
+        // Note direct snake case access, strategy is a json object
+        email_address_id: strategy.email_address_id,
+      });
+
+      router.push('/sign-in/factor-one');
     } catch (err) {
       console.log(err);
     }
@@ -23,20 +33,14 @@ const SignIn = () => {
   return (
     <div className="flex flex-col min-h-screen py-24 bg-gray-50 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <img className="w-auto h-12 mx-auto" src="./clerk.svg" alt="Clerk" />
+        <img className="w-auto h-12 mx-auto" src="../clerk.svg" alt="Clerk" />
         <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
-          Sign in
+          Forgot password
         </h2>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
-          <SignUpWithGoogle />
-          <div class="flex items-center justify-center space-x-3 py-5">
-            <div class="w-32 h-px bg-gray-300"></div>
-            <p class="text-sm font-medium text-gray-400">OR</p>
-            <div class="w-32 h-px bg-gray-300"></div>
-          </div>
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label
@@ -59,38 +63,12 @@ const SignIn = () => {
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  {...register('password')}
-                  className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <div>
               <button
                 type="submit"
                 className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                Sign in
+                Send me a code!
               </button>
-            </div>
-
-            <div className="text-sm text-center">
-              <Link href="/sign-in/forgot-password">
-                <a>Forgot password?</a>
-              </Link>
             </div>
           </form>
         </div>
@@ -99,4 +77,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ForgotPassword;

@@ -1,14 +1,16 @@
 import { useClerk } from '@clerk/clerk-react'
+import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 
 const FactorOne = () => {
   const { register, handleSubmit } = useForm();
   const { client } = useClerk();
   const { signInAttempt } = client;
+  const router = useRouter();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async ({ code }) => {
     try {
-      await signInAttempt.attemptEmailAddressVerification(data);
+      await signInAttempt.attemptFactorOne({ strategy: 'email_code', code });
       router.push('/');
     } catch (err) {
       console.log(err);
