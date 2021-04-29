@@ -1,4 +1,4 @@
-import HandleOAuth from '../sign-up/handle-oauth'
+import HandleOAuth from '../../components/HandleOAuth'
 
 const HandleOAuthPage = () => <HandleOAuth />;
 
