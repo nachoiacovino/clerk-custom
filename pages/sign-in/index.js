@@ -8,7 +8,7 @@ import RedirectToIndex from '../../components/RedirectToIndex'
 import SignUpWithGoogle from '../../components/SignUpWithGoogle'
 
 const SignIn = () => {
-  const { client, setSession, navigateAfterSignIn } = useClerk();
+  const { client, setSession } = useClerk();
   const { signInAttempt } = client;
   const { register, handleSubmit } = useForm();
   const router = useRouter();
