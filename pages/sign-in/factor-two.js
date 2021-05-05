@@ -26,7 +26,7 @@ const FactorTwo = () => {
     }
   };
 
-  return <CodeVerification onSubmit={onSubmit} />;
+  return <CodeVerification onSubmit={onSubmit} phone />;
 };
 
 export default FactorTwo;

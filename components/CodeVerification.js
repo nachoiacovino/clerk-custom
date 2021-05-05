@@ -1,9 +1,9 @@
-import { SignedIn, SignedOut, useClerk } from '@clerk/clerk-react'
-import { useForm } from 'react-hook-form'
+import { SignedIn, SignedOut, useClerk } from '@clerk/clerk-react';
+import { useForm } from 'react-hook-form';
 
-import RedirectToIndex from './RedirectToIndex'
+import RedirectToIndex from './RedirectToIndex';
 
-const CodeVerification = ({ onSubmit }) => {
+const CodeVerification = ({ onSubmit, phone }) => {
   const { register, handleSubmit } = useForm();
   const { client } = useClerk();
   const { signInAttempt } = client;
@@ -18,8 +18,8 @@ const CodeVerification = ({ onSubmit }) => {
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
               <h2 className="mt-6 mb-4 text-2xl font-extrabold text-center text-gray-900">
-                Enter the 6-digit code you received in your email{' '}
-                {signInAttempt.emailAddress}
+                Enter the 6-digit code you received in your{' '}
+                {phone ? 'phone' : 'email'} {signInAttempt.emailAddress}
               </h2>
               <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                 <div>
