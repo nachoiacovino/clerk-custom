@@ -1,7 +1,7 @@
-import { useClerk } from '@clerk/clerk-react'
-import { useRouter } from 'next/router'
+import { useClerk } from '@clerk/clerk-react';
+import { useRouter } from 'next/router';
 
-import CodeVerification from '../../components/CodeVerification'
+import CodeVerification from '../../components/CodeVerification';
 
 const FactorOne = () => {
   const { client, setSession } = useClerk();
@@ -10,11 +10,11 @@ const FactorOne = () => {
 
   const onSubmit = async ({ code }) => {
     try {
-      const response = await signInAttempt.attemptFactorOne({
+      await signInAttempt.attemptFactorOne({
         strategy: 'email_code',
         code,
       });
-      setSession(response.createdSessionId, () => router.push('/'));
+      router.push('/sign-in/factor-two');
     } catch (err) {
       console.log(err);
     }
