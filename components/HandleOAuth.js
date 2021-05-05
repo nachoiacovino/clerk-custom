@@ -1,6 +1,6 @@
-import { useClerk } from '@clerk/clerk-react'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useClerk } from '@clerk/clerk-react';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const HandleOAuth = () => {
   const { client, setSession } = useClerk();
@@ -10,6 +10,10 @@ const HandleOAuth = () => {
   useEffect(() => {
     const load = async () => {
       try {
+        if (signInAttempt.status === 'needs_factor_two') {
+          router.push('/sign-in/factor-two');
+        }
+
         if (signInAttempt.factorOneVerification.status === 'transferable') {
           const response = await signUpAttempt.create({ transfer: true });
           if (response.status === 'complete') {
@@ -23,13 +27,8 @@ const HandleOAuth = () => {
           // If it's transferable, create a signInAttempt with it
           const response = await signInAttempt.create({ transfer: true });
 
-          // If 2fa is not on, the newly created signInAttempt will immediately
-          // turn to complete
           if (response.status === 'complete') {
             setSession(response.createdSessionId, () => router.push('/'));
-          } else if (response.status === 'needs_factor_two') {
-            // sometimes you need to collect a second factor
-            // more on this later
           }
         }
       } catch (err) {
