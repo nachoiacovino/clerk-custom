@@ -5,6 +5,8 @@ const SignUpWithGoogle = ({ signIn }) => {
   const { signInAttempt, signUpAttempt } = client;
   let handleClick;
 
+  const redirectUrl = window.location.origin;
+
   if (signIn) {
     handleClick = async () => {
       const response = await signInAttempt.create({
@@ -12,11 +14,11 @@ const SignUpWithGoogle = ({ signIn }) => {
         // Redirect here if oauth fails, if the account hasn't
         // been created yet, or if a second factor still needs
         // to be collected
-        redirect_url: `${process.env.NEXT_PUBLIC_REDIRECT_URL}sign-in/handle-oauth`,
+        redirect_url: `${redirectUrl}/sign-in/handle-oauth`,
         // Redirect here if oauth successfully creates a session
         // For default settings, if the account has already been
         // created, this is where the user will end up.
-        action_complete_redirect_url: process.env.NEXT_PUBLIC_REDIRECT_URL,
+        action_complete_redirect_url: redirectUrl,
       });
 
       window.location.href =
@@ -28,12 +30,11 @@ const SignUpWithGoogle = ({ signIn }) => {
         external_account_strategy: 'oauth_google',
         // Redirect here if oauth fails or if additional fields must
         // still be collected after oauth
-        external_account_redirect_url: `${process.env.NEXT_PUBLIC_REDIRECT_URL}sign-up/handle-oauth`,
+        external_account_redirect_url: `${redirectUrl}/sign-up/handle-oauth`,
         // Redirect here if oauth successfully creates an account
         // For default settings and a new account, this is where
         // the user will end up.
-        external_account_action_complete_redirect_url:
-          process.env.NEXT_PUBLIC_REDIRECT_URL,
+        external_account_action_complete_redirect_url: redirectUrl,
       });
 
       window.location.href =
