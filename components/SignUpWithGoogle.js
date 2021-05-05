@@ -1,4 +1,4 @@
-import { useClerk } from '@clerk/clerk-react'
+import { useClerk } from '@clerk/clerk-react';
 
 const SignUpWithGoogle = ({ signIn }) => {
   const { client } = useClerk();
@@ -12,11 +12,11 @@ const SignUpWithGoogle = ({ signIn }) => {
         // Redirect here if oauth fails, if the account hasn't
         // been created yet, or if a second factor still needs
         // to be collected
-        redirect_url: 'http://localhost:3000/sign-in/handle-oauth',
+        redirect_url: `${process.env.NEXT_PUBLIC_REDIRECT_URL}sign-in/handle-oauth`,
         // Redirect here if oauth successfully creates a session
         // For default settings, if the account has already been
         // created, this is where the user will end up.
-        action_complete_redirect_url: 'http://localhost:3000',
+        action_complete_redirect_url: process.env.NEXT_PUBLIC_REDIRECT_URL,
       });
 
       window.location.href =
@@ -28,12 +28,12 @@ const SignUpWithGoogle = ({ signIn }) => {
         external_account_strategy: 'oauth_google',
         // Redirect here if oauth fails or if additional fields must
         // still be collected after oauth
-        external_account_redirect_url:
-          'http://localhost:3000/sign-up/handle-oauth',
+        external_account_redirect_url: `${process.env.NEXT_PUBLIC_REDIRECT_URL}sign-up/handle-oauth`,
         // Redirect here if oauth successfully creates an account
         // For default settings and a new account, this is where
         // the user will end up.
-        external_account_action_complete_redirect_url: 'http://localhost:3000',
+        external_account_action_complete_redirect_url:
+          process.env.NEXT_PUBLIC_REDIRECT_URL,
       });
 
       window.location.href =
