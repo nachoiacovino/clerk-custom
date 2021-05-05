@@ -10,11 +10,17 @@ const FactorOne = () => {
 
   const onSubmit = async ({ code }) => {
     try {
-      await signInAttempt.attemptFactorOne({
+      const response = await signInAttempt.attemptFactorOne({
         strategy: 'email_code',
         code,
       });
-      router.push('/sign-in/factor-two');
+      console.log(response);
+
+      if (response.status === 'needs_factor_two') {
+        router.push('/sign-in/factor-two');
+      } else if (response.status === 'complete') {
+        setSession(response.createdSessionId, () => router.push('/'));
+      }
     } catch (err) {
       console.log(err);
     }
