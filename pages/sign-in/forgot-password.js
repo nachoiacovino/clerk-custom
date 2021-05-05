@@ -1,12 +1,16 @@
-import { useClerk } from '@clerk/clerk-react'
-import { useRouter } from 'next/router'
-import { useForm } from 'react-hook-form'
+import { useClerk } from '@clerk/clerk-react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+
+import DisplayErrors from '../../components/DisplayErrors';
 
 const ForgotPassword = () => {
   const { client } = useClerk();
   const { signInAttempt } = client;
   const { register, handleSubmit } = useForm();
   const router = useRouter();
+  const [errors, setErrors] = useState();
 
   const onSubmit = async (data) => {
     try {
@@ -14,8 +18,6 @@ const ForgotPassword = () => {
       const strategy = response.allowedFactorOneStrategies.find(
         (x) => x.name === 'email_code',
       );
-
-      console.log(strategy);
 
       // 3. Send the email code
       await signInAttempt.prepareFactorOne({
@@ -26,7 +28,7 @@ const ForgotPassword = () => {
 
       router.push('/sign-in/factor-one');
     } catch (err) {
-      console.log(err);
+      setErrors(err.errors);
     }
   };
 
@@ -70,6 +72,8 @@ const ForgotPassword = () => {
                 Send me a code!
               </button>
             </div>
+
+            <DisplayErrors errors={errors} />
           </form>
         </div>
       </div>

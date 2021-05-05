@@ -1,24 +1,26 @@
-import { SignedIn, SignedOut, useClerk } from '@clerk/clerk-react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { SignedIn, SignedOut, useClerk } from '@clerk/clerk-react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-import RedirectToIndex from '../../components/RedirectToIndex'
-import SignUpWithGoogle from '../../components/SignUpWithGoogle'
+import DisplayErrors from '../../components/DisplayErrors';
+import RedirectToIndex from '../../components/RedirectToIndex';
+import SignUpWithGoogle from '../../components/SignUpWithGoogle';
 
 const SignIn = () => {
   const { client, setSession } = useClerk();
   const { signInAttempt } = client;
   const { register, handleSubmit } = useForm();
   const router = useRouter();
+  const [errors, setErrors] = useState();
 
   const onSubmit = async (data) => {
     try {
       const response = await signInAttempt.create(data);
       setSession(response.createdSessionId, () => router.push('/'));
     } catch (err) {
-      console.log(err);
+      setErrors(err.errors);
     }
   };
 
@@ -94,6 +96,9 @@ const SignIn = () => {
                     Sign in
                   </button>
                 </div>
+
+                <DisplayErrors errors={errors} />
+
                 <div className="text-sm text-center">
                   <Link href="/sign-in/forgot-password">
                     <a>Forgot password?</a>

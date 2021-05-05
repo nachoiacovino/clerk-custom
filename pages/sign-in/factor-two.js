@@ -1,6 +1,6 @@
 import { useClerk } from '@clerk/clerk-react';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import CodeVerification from '../../components/CodeVerification';
 
@@ -8,6 +8,7 @@ const FactorTwo = () => {
   const { client, setSession } = useClerk();
   const { signInAttempt } = client;
   const router = useRouter();
+  const [errors, setErrors] = useState();
 
   useEffect(() => {
     signInAttempt.prepareFactorTwo({ strategy: 'phone_code' });
@@ -22,11 +23,11 @@ const FactorTwo = () => {
 
       setSession(response.createdSessionId, () => router.push('/'));
     } catch (err) {
-      console.log(err);
+      setErrors(err.errors);
     }
   };
 
-  return <CodeVerification onSubmit={onSubmit} phone />;
+  return <CodeVerification onSubmit={onSubmit} phone errors={errors} />;
 };
 
 export default FactorTwo;

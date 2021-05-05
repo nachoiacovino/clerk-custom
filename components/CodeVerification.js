@@ -1,9 +1,11 @@
 import { SignedIn, SignedOut, useClerk } from '@clerk/clerk-react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import DisplayErrors from './DisplayErrors';
 import RedirectToIndex from './RedirectToIndex';
 
-const CodeVerification = ({ onSubmit, phone }) => {
+const CodeVerification = ({ onSubmit, phone, errors }) => {
   const { register, handleSubmit } = useForm();
   const { client } = useClerk();
   const { signInAttempt } = client;
@@ -43,6 +45,8 @@ const CodeVerification = ({ onSubmit, phone }) => {
                     Verify
                   </button>
                 </div>
+
+                <DisplayErrors errors={errors} />
               </form>
             </div>
           </div>

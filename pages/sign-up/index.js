@@ -1,16 +1,18 @@
-import { SignedIn, SignedOut, useClerk } from '@clerk/clerk-react'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { SignedIn, SignedOut, useClerk } from '@clerk/clerk-react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-import RedirectToIndex from '../../components/RedirectToIndex'
-import SignUpWithGoogle from '../../components/SignUpWithGoogle'
+import DisplayErrors from '../../components/DisplayErrors';
+import RedirectToIndex from '../../components/RedirectToIndex';
+import SignUpWithGoogle from '../../components/SignUpWithGoogle';
 
 const SignUp = () => {
   const { client } = useClerk();
   const { signUpAttempt } = client;
   const { register, handleSubmit } = useForm();
   const router = useRouter();
+  const [errors, setErrors] = useState();
 
   const onSubmit = async (data) => {
     try {
@@ -18,7 +20,7 @@ const SignUp = () => {
       await signUpAttempt.prepareEmailAddressVerification();
       router.push('sign-up/verify-email-address');
     } catch (err) {
-      console.log(err);
+      setErrors(err.errors);
     }
   };
 
@@ -135,6 +137,8 @@ const SignUp = () => {
                     Sign up
                   </button>
                 </div>
+
+                <DisplayErrors errors={errors} />
               </form>
             </div>
           </div>
