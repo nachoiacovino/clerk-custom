@@ -1,7 +1,8 @@
-import { useClerk } from '@clerk/clerk-react';
-import { useRouter } from 'next/router';
+import { useClerk } from '@clerk/clerk-react'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 
-import CodeVerification from '../../components/CodeVerification';
+import CodeVerification from '../../components/CodeVerification'
 
 const VerifyEmailAddress = () => {
   const { client, setSession } = useClerk();

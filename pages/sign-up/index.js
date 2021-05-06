@@ -1,11 +1,11 @@
-import { SignedIn, SignedOut, useClerk } from '@clerk/clerk-react';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SignedIn, SignedOut, useClerk } from '@clerk/clerk-react'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
-import DisplayErrors from '../../components/DisplayErrors';
-import RedirectToIndex from '../../components/RedirectToIndex';
-import SignUpWithGoogle from '../../components/SignUpWithGoogle';
+import DisplayErrors from '../../components/DisplayErrors'
+import RedirectToIndex from '../../components/RedirectToIndex'
+import SignUpWithGoogle from '../../components/SignUpWithGoogle'
 
 const SignUp = () => {
   const { client } = useClerk();
